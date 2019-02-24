@@ -12,10 +12,14 @@ class MyToDoListViewController: UITableViewController {
     
     var itemArray = ["Find Mike", "Buy eggs", "Destroy Demogorgon"]
     
+    let defaults = UserDefaults.standard
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        if let items = defaults.array(forKey: "TodoListArray") as? [String] {
+            itemArray = items
+        }
     
     }
 
@@ -43,7 +47,7 @@ class MyToDoListViewController: UITableViewController {
         } else {
             tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
         }
-        
+           
         tableView.deselectRow(at: indexPath, animated: true)
         
 
@@ -60,6 +64,8 @@ class MyToDoListViewController: UITableViewController {
         let action = UIAlertAction(title: "Add Item", style: .default) { (action) in
             // what will happen once the user clicks the Add item button on our UIAlert
             self.itemArray.append(textField.text!)
+            
+            self.defaults.set(self.itemArray, forKey: "TodoListArray")
         
             self.tableView.reloadData()
         }
